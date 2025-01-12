@@ -1,23 +1,31 @@
-import { Canvas } from "@react-three/fiber";
 import "./App.css";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+
+function AnimatedBox() {
+  const boxRef = useRef();
+
+  useFrame(() => {
+    boxRef.current.rotation.x += 0.005;
+    boxRef.current.rotation.y += 0.005;
+    boxRef.current.rotation.z += 0.005;
+  }
+  );
+
+  return (
+    <mesh ref={boxRef}>
+      <boxGeometry args={[2, 2, 2]}/>
+     <meshStandardMaterial color={0x00bfff} />
+    </mesh>
+  )
+}
 
 function App() {
   return (
     <div id="canvas-container">
       <Canvas >
-          {/* We can apply 3 different transformations to the mesh, translation, rotation, and scale */}
-          {/* Position : The position prop is used to move the mesh along the x, y, and z axes. */}
-          {/* Rotation : The rotation prop is used to rotate the mesh around the x, y, and z axes. */}
-          {/* Scale : The scale prop is used to scale the mesh along the x, y, and z axes. */}
-        <mesh 
-        position={[-2, 2, -1]} 
-        rotation={[0, 0 , Math.PI]}
-        scale={[1, 1, 1]}
-        >
-         <torusKnotGeometry args={[1.7, 0.3, 256, 256]} />
-         <meshToonMaterial color={0x00bfff} />
+         <AnimatedBox/>
          <directionalLight position={[2, 5, 1]} />
-        </mesh>
       </Canvas>
     </div>
   );
