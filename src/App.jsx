@@ -1,5 +1,5 @@
 import "./App.css";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { useRef } from "react";
 import {
   OrbitControls,
@@ -7,16 +7,17 @@ import {
   GizmoViewcube,
   GizmoViewport,
   useHelper,
+  useGLTF
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { SpotLightHelper, DirectionalLightHelper, CameraHelper} from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 
-// To make object cast shadows we need to add shadows prop to the canvas.
-// Next we need to specify wich objects will cast shadows by adding castShadow prop to the object.
-// To make the light cast shadows we need to add castShadow prop to the light.
-// Then we use the receiveShadow prop to the object that will receive the shadow.
-
+// To add models to the scene, first we need to import the files to the public folder.
+// Now when it comes to the code we have 2 options:
+// 1. Use the combination of the useLoader hook and a loader function to load the model.
+// 2. Almost the same as the first method except we'll use a hook from drei 'useGLTF' .
 
 function LightWithHelper() {
   const light = useRef();
@@ -99,6 +100,22 @@ function AnimatedBox() {
   );
 }
 
+// First method
+
+function Model(){
+  const result = useLoader(GLTFLoader, "/space-ship-scaled.glb");
+
+  return <primitive object={result.scene} position={[0,-1.5,0]} />;
+}
+
+// Second method
+
+function SecondModel(){
+  const result = useGLTF("/space-ship-scaled.glb");
+
+  return <primitive object={result.scene} position={[0,0,0]} />;
+}
+
 function App() {
   return (
     <div id="canvas-container">
@@ -116,6 +133,8 @@ function App() {
           <planeGeometry args={[20, 20]} />
           <meshStandardMaterial color="#f3f3f3"/>
         </mesh>
+        {/* <Model /> */}
+        <SecondModel />
       </Canvas>
     </div>
   );
