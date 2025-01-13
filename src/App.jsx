@@ -1,5 +1,5 @@
 import "./App.css";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import {
   OrbitControls,
@@ -8,10 +8,11 @@ import {
   GizmoViewport,
   useHelper,
   useGLTF,
-  useTexture
+  useTexture,
+  useCubeTexture
 } from "@react-three/drei";
 import { useControls } from "leva";
-import { SpotLightHelper, DirectionalLightHelper, CameraHelper, TextureLoader} from "three";
+import { SpotLightHelper, DirectionalLightHelper, CameraHelper, TextureLoader, Color, SRGBColorSpace, CubeTextureLoader} from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 
@@ -139,6 +140,39 @@ function SecondModel(){
   return <primitive object={result.scene} position={[0,0,0]} />;
 }
 
+// Aplying texture to a scene
+function UpdateSceneBackground() {
+  const { scene } = useThree();
+
+  const texture = useTexture("/stars.jpg");
+  texture.colorSpace = SRGBColorSpace;
+
+  // const [texture] = useLoader(CubeTextureLoader, [[
+  //   '/texture.jpg',
+  //   '/texture2.jpg',
+  //   '/texture3.jpg',
+  //   '/texture4.jpg',
+  //   '/texture5.jpg',
+  //   '/texture6.jpg'
+  // ]]);
+
+  // const texture = useCubeTexture(
+  //   [
+  //     "texture.jpg",
+  //     "texture2.jpg",
+  //     "texture3.jpg",
+  //     "texture4.jpg",
+  //     "texture5.jpg",
+  //     "texture6.jpg"
+  //   ],
+  //   {path:'/'}
+  // )
+
+  scene.background = texture;
+
+  return null;
+}
+
 //Aplying texture to a box
 function BoxWithTexture() {
   const texture = useTexture("/texture.jpg");
@@ -196,6 +230,7 @@ function App() {
         <SphereWithTexture2 />
         <BoxWithTexture />
         <BoxWith6Textures />
+        <UpdateSceneBackground />
         {/* <SecondModel /> */}
       </Canvas>
     </div>
