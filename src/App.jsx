@@ -2,10 +2,11 @@ import "./App.css";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { FirstPersonControls } from "@react-three/drei";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, GizmoHelper, GizmoViewcube, GizmoViewport} from "@react-three/drei";
 
-// for camera controls we need to install the following package '@react-three/drei'
-// wich is a collection of useful helpers and abstractions for react-three-fiber
+// Helpers and Gizmos are utility objects that assist in visualizing or debugging
+// aspects of our R3F scene. They are not meant to be used in production.
+// We will try 3 of them: AxesHelper, GridHelper, and Gizmo Viewport.
 
 function AnimatedBox() {
   const boxRef = useRef();
@@ -20,23 +21,22 @@ function AnimatedBox() {
   return (
     <mesh ref={boxRef}>
       <boxGeometry args={[2, 2, 2]}/>
-     <meshStandardMaterial color={0x00bfff} />
+      <axesHelper args={[10]}/>
+     <meshStandardMaterial color={0x00bfff}/>
     </mesh>
   )
 }
-
-// FirstPersonControls is a component that allows us to move the camera like a first person game
-// movementSpeed is the speed of the camera
-// other props are available like lookSpeed, lookVertical, enabled, heightCoef, heightMin, heightMax, width, autoForward, etc
-
-// OrbitControls is a component that allows us to move the camera like a third person game
-// other props are available like enableZoom, enablePan, enableDamping, dampingFactor, enableRotate, rotateSpeed, zoomSpeed, panSpeed, etc
 
 function App() {
   return (
     <div id="canvas-container">
       <Canvas >
-        {/* <FirstPersonControls movementSpeed={2} /> */}
+        <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
+          <GizmoViewport />
+          <GizmoViewcube />
+        </GizmoHelper>
+        <gridHelper args={[20,20, 0xff22aa, 0x55ccff]}/>
+        <axesHelper args={[10]}/>
         <OrbitControls />
          <AnimatedBox/>
          <directionalLight position={[2, 5, 1]} />
