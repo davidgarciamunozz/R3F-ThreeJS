@@ -7,7 +7,8 @@ import {
   GizmoViewcube,
   GizmoViewport,
   useHelper,
-  useGLTF
+  useGLTF,
+  useTexture
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { SpotLightHelper, DirectionalLightHelper, CameraHelper, TextureLoader} from "three";
@@ -21,6 +22,20 @@ function SphereWithTexture() {
   const texture = useLoader(TextureLoader, "/texture.jpg");
   return (
     <mesh position={[-2, 3, 2]} >
+      <sphereGeometry/>
+      <meshStandardMaterial map={texture} />
+    </mesh>
+  )
+}
+
+
+// Another way to apply textures to an object is by using the useTexture hook from drei.
+function SphereWithTexture2() {
+ 
+  const texture = useTexture("/texture.jpg");
+
+  return (
+    <mesh position={[0, 1, -2]} >
       <sphereGeometry/>
       <meshStandardMaterial map={texture} />
     </mesh>
@@ -124,6 +139,41 @@ function SecondModel(){
   return <primitive object={result.scene} position={[0,0,0]} />;
 }
 
+//Aplying texture to a box
+function BoxWithTexture() {
+  const texture = useTexture("/texture.jpg");
+
+  return (
+    <mesh position={[0, 2, -4]}>
+      <boxGeometry />
+      <meshBasicMaterial map={texture} />
+    </mesh>
+  );
+}
+
+//Aplying 6 different textures to a box.
+
+function BoxWith6Textures() {
+  const texture1 = useTexture("/texture.jpg");
+  const texture2 = useTexture("/texture2.jpg");
+  const texture3 = useTexture("/texture3.jpg");
+  const texture4 = useTexture("/texture4.jpg");
+  const texture5 = useTexture("/texture5.jpg");
+  const texture6 = useTexture("/texture6.jpg");
+
+  return (
+    <mesh position={[0, 2, -4]}>
+      <boxGeometry />
+      <meshBasicMaterial attach='material-0' map={texture1} />
+      <meshBasicMaterial attach='material-1' map={texture2} />
+      <meshBasicMaterial attach='material-2' map={texture3} />
+      <meshBasicMaterial attach='material-3' map={texture4} />
+      <meshBasicMaterial attach='material-4' map={texture5} />
+      <meshBasicMaterial attach='material-5' map={texture6} />
+    </mesh>
+  );
+}
+
 function App() {
   return (
     <div id="canvas-container">
@@ -143,7 +193,10 @@ function App() {
         </mesh>
         {/* <Model /> */}
         <SphereWithTexture />
-        <SecondModel />
+        <SphereWithTexture2 />
+        <BoxWithTexture />
+        <BoxWith6Textures />
+        {/* <SecondModel /> */}
       </Canvas>
     </div>
   );
