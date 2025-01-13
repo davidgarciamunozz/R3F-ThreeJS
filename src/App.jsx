@@ -1,20 +1,32 @@
 import "./App.css";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
-import { FirstPersonControls } from "@react-three/drei";
 import { OrbitControls, GizmoHelper, GizmoViewcube, GizmoViewport} from "@react-three/drei";
+import { useControls } from "leva";
 
-// Helpers and Gizmos are utility objects that assist in visualizing or debugging
-// aspects of our R3F scene. They are not meant to be used in production.
-// We will try 3 of them: AxesHelper, GridHelper, and Gizmo Viewport.
+// Manually changing values to test various settings can be somewhat frustrating and time consuming.
+// A fantastic debbuging tool we can use is Leva, which allows us to change values in real time.
+// install leva by running npm install leva (leva@0.9.34), latest version may have some issues with color picker.
+
 
 function AnimatedBox() {
   const boxRef = useRef();
 
+  const {color, speed} = useControls({
+    color : '#00bfff',
+    speed: {
+      value: 0.005,
+      min: 0,
+      max: 0.2,
+      step: 0.001,
+    }
+  }
+  );
+
   useFrame(() => {
-    boxRef.current.rotation.x += 0.005;
-    boxRef.current.rotation.y += 0.005;
-    boxRef.current.rotation.z += 0.005;
+    boxRef.current.rotation.x += speed;
+    boxRef.current.rotation.y += speed;
+    boxRef.current.rotation.z += speed;
   }
   );
 
@@ -22,7 +34,7 @@ function AnimatedBox() {
     <mesh ref={boxRef}>
       <boxGeometry args={[2, 2, 2]}/>
       <axesHelper args={[10]}/>
-     <meshStandardMaterial color={0x00bfff}/>
+     <meshStandardMaterial color={color}/>
     </mesh>
   )
 }
