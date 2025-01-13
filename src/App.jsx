@@ -1,6 +1,6 @@
 import "./App.css";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   OrbitControls,
   GizmoHelper,
@@ -109,6 +109,13 @@ function AnimatedBox() {
     },
   });
 
+  const [wireframe, setWireframe] = useState(false);
+
+  const handleClick = () => {
+    setWireframe(!wireframe);
+    boxRef.current.material.wireframe = wireframe;
+  }
+
   useFrame(() => {
     boxRef.current.rotation.x += speed;
     boxRef.current.rotation.y += speed;
@@ -116,10 +123,10 @@ function AnimatedBox() {
   });
 
   return (
-    <mesh ref={boxRef} position={[5, 3, 0]} castShadow>
+    <mesh ref={boxRef} position={[5, 3, 0]} castShadow onClick={handleClick}>
       <boxGeometry args={[2, 2, 2]} />
       <axesHelper args={[10]} />
-      <meshStandardMaterial color={color} />
+      <meshStandardMaterial color={color} wireframe={wireframe} />
     </mesh>
   );
 }
