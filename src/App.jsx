@@ -10,14 +10,22 @@ import {
   useGLTF
 } from "@react-three/drei";
 import { useControls } from "leva";
-import { SpotLightHelper, DirectionalLightHelper, CameraHelper} from "three";
+import { SpotLightHelper, DirectionalLightHelper, CameraHelper, TextureLoader} from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 
-// To add models to the scene, first we need to import the files to the public folder.
-// Now when it comes to the code we have 2 options:
-// 1. Use the combination of the useLoader hook and a loader function to load the model.
-// 2. Almost the same as the first method except we'll use a hook from drei 'useGLTF' .
+// To apply textures to an object, we need to make a customm component and import the TextureLoader from three.
+
+function SphereWithTexture() {
+
+  const texture = useLoader(TextureLoader, "/texture.jpg");
+  return (
+    <mesh position={[-2, 3, 2]} >
+      <sphereGeometry/>
+      <meshStandardMaterial map={texture} />
+    </mesh>
+  )
+}
 
 function LightWithHelper() {
   const light = useRef();
@@ -134,6 +142,7 @@ function App() {
           <meshStandardMaterial color="#f3f3f3"/>
         </mesh>
         {/* <Model /> */}
+        <SphereWithTexture />
         <SecondModel />
       </Canvas>
     </div>
